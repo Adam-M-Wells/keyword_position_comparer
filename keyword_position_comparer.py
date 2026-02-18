@@ -70,6 +70,12 @@ if uploaded_files:
                 f"URL_{i}"
             ]
 
+            # FORCE Keyword column to string and strip spaces
+            df["Keyword"] = df["Keyword"].astype(str).str.strip()
+
+            # Remove empty keywords
+            df = df[df["Keyword"] != ""]
+
             dfs.append(df)
 
         except Exception as e:
@@ -121,7 +127,6 @@ if uploaded_files:
     # Appearance count
     # -------------------------
     position_cols = [f"Position_{i}" for i in range(1, num_files + 1)]
-
     merged_df["Appearances"] = merged_df[position_cols].apply(
         lambda row: sum(x != "N/A" for x in row),
         axis=1
@@ -196,4 +201,3 @@ if uploaded_files:
 
     st.subheader("Preview: Only 1 Competitor (Not in Client)")
     st.dataframe(tab3.head(20))
-
